@@ -280,7 +280,7 @@
   .app__table-control {
     text-align: right;
     td {
-      padding-right: 47px;
+      padding-right: 30px;
     }
   }
 
@@ -288,7 +288,9 @@
     border: none;
     color: $hole-dark;
     font-size: 1rem;
-    width: 65px;
+    width: 75px;
+    margin-right: 32px;
+    padding-left: 5px;
   }
 
   input[type=checkbox] {
@@ -302,6 +304,7 @@
     border-radius: 2px;
     border: 1px solid $middle-gray;
     cursor: pointer;
+    transition: background .3s;
   }
 
   input[type="checkbox"]:checked+label {
@@ -313,6 +316,7 @@
     cursor: pointer;
     position: relative;
     border: 1px solid $sweet-orange;
+    transition: background .3s;
   }
 
   input[type="checkbox"]:checked+label:after {
@@ -325,6 +329,7 @@
 
 .ion-ios-arrow-left {
   padding-right: 20px;
+  padding-left: 10px;
 }
 
 .ion-ios-arrow-left, .ion-ios-arrow-right {
