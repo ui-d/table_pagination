@@ -20,11 +20,11 @@
         <tr class="app__table-control">
           <td colspan="3">Rows per page:
             <select name="" id="" v-model="pagination_nr">
-              <option value="5" selected>5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
+              <option selected>5</option>
+              <option>10</option>
+              <option>15</option>
             </select>
-           {{start_from}} - {{end_to}} of {{details.length}}
+           {{start_from}} - {{end_to}} of {{database.length}}
             <span @click="decrement" class="ion-ios-arrow-left"></span>
             <span @click="increment" class="ion-ios-arrow-right"></span>
          
@@ -97,114 +97,117 @@
             done: false
           },
           {
-            task: "Take out the trash",
+            task: "Take out the trash 2",
             priority: "Medium",
             done: false
           },
           {
-            task: "Feed the dog",
+            task: "Feed the dog 2",
             priority: "High",
             done: true
           },
           {
-            task: "Order lunch",
+            task: "Order lunch 2",
             priority: "High",
             done: false
           },
           {
-            task: "Send email to Peter",
+            task: "Send email to Peter 2",
             priority: "Low",
             done: true
           },
           {
-            task: "Buy groceries",
+            task: "Buy groceries 2",
             priority: "Medium",
             done: false
           },
           {
-            task: "Take out the trash",
+            task: "Take out the trash 3",
             priority: "Medium",
             done: false
           },
           {
-            task: "Feed the dog",
+            task: "Feed the dog 3",
             priority: "High",
             done: true
           },
           {
-            task: "Order lunch",
+            task: "Order lunch 3",
             priority: "High",
             done: false
           },
           {
-            task: "Send email to Peter",
+            task: "Send email to Peter 3",
             priority: "Low",
             done: true
           },
           {
-            task: "Buy groceries",
+            task: "Buy groceries 3",
             priority: "Medium",
             done: false
           },
           {
-            task: "Take out the trash",
+            task: "Take out the trash 4",
             priority: "Medium",
             done: false
           },
           {
-            task: "Feed the dog",
+            task: "Feed the dog 4",
             priority: "High",
             done: true
           },
           {
-            task: "Order lunch",
+            task: "Order lunch 4",
             priority: "High",
             done: false
           },
           {
-            task: "Send email to Peter",
+            task: "Send email to Peter 4",
             priority: "Low",
             done: true
           },
           {
-            task: "Buy groceries",
+            task: "Buy groceries 4",
             priority: "Medium",
             done: false
           },
           {
-            task: "Take out the trash",
+            task: "Take out the trash 5",
             priority: "Medium",
             done: false
           },
           {
-            task: "Feed the dog",
+            task: "Feed the dog 5",
             priority: "High",
             done: true
           },
           {
-            task: "Order lunch",
+            task: "Order lunch 5",
             priority: "High",
             done: false
           },
           {
-            task: "Send email to Peter",
+            task: "Send email to Peter 5",
             priority: "Low",
             done: true
           },
           {
-            task: "Buy groceries",
+            task: "Buy groceries 5",
             priority: "Medium",
             done: false
           }
         ],
         pagination_nr: 5,
         start_from: 1,
-        end_to: 5
+        end_to: 5,
+        counter: 2
       }
     },
     watch: {
       pagination_nr() {
         this.details = this.database.slice(0, this.pagination_nr);
+        this.start_from = 1;
+        this.end_to = this.pagination_nr;
       }
     },
     created() {
@@ -212,9 +215,25 @@
     },
     methods: {
       increment() {
-        this.details = this.database.slice(this.pagination_nr);
-        this.start_from += this.pagination_nr;
-        this.end_to += this.pagination_nr;
+        let pageNum = parseInt(this.pagination_nr),
+            ends = parseInt(this.end_to),
+            starts = parseInt(this.start_from),
+            count = this.counter;
+        this.details = this.database.slice(pageNum, pageNum*count);
+        if(ends + pageNum < this.database.length){
+          this.end_to = ends + pageNum;
+        } else {
+          this.end_to = this.database.length;
+        }
+        if(starts + pageNum < this.database.length) {
+          this.start_from = starts + pageNum;
+        } else {
+          return;
+        }
+        this.pageNum = pageNum + pageNum;
+      },
+      decrement(){
+
       }
     }
   }
@@ -302,7 +321,7 @@
     width: 16px;
     height: 16px;
     border-radius: 2px;
-    border: 1px solid $middle-gray;
+    border: 2px solid $middle-gray;
     cursor: pointer;
     transition: background .3s;
   }
