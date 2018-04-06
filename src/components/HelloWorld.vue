@@ -3,9 +3,9 @@
     <table class="app__table">
       <thead>
         <tr v-for="(header, index) in headers" :key="index">
-          <td>{{header.first}}</td>
-          <td>{{header.second}}</td>
-          <td>{{header.third}}</td>
+          <td @click="sort_tasks">{{header.first}}</td>
+          <td @click="sort_priority">{{header.second}}</td>
+          <td @click="sort_done">{{header.third}}</td>
         </tr>
       </thead>
       <tbody>
@@ -201,7 +201,8 @@
         helpers: {
           start_from: 1,
           end_to: 5,
-          counter: 2
+          counter: 2,
+          sort_task: false
         }
       }
     },
@@ -218,6 +219,7 @@
     },
     methods: {
       increment() {
+
         let pageNum = this.pagination_nr,
           ends = this.helpers.end_to,
           starts = this.helpers.start_from,
@@ -249,6 +251,7 @@
           ends = this.helpers.end_to,
           starts = this.helpers.start_from,
           count = this.helpers.counter;
+
         if (this.helpers.conuter === 6) {
           this.helpers.counter = 4;
         }
@@ -257,6 +260,27 @@
           console.log(this.helpers.counter, pageNum)
           this.details = this.database.slice(pageNum * (count - 2), (pageNum * (count - 1)));
         }
+      },
+      sort_tasks() {
+      // this.database.sort(function (a, b) {
+      //     return a.task < b.task
+      //   });
+
+      this.helpers.sort_task = true;
+
+
+
+
+      },
+      sort_priority() {
+        this.details.sort(function (a, b) {
+          return a.priority > b.priority
+        });
+      },
+      sort_done() {
+        this.details.sort(function (a, b) {
+          return a.done > b.done
+        });
       }
     }
   }
@@ -305,6 +329,7 @@
     color: $pure-white;
     td {
       border: none;
+      cursor: pointer;
     }
   }
 
