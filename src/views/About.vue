@@ -1,20 +1,21 @@
 <template>
   <div class="input">
+    <img src="../assets/logo.png">
     <div class="form-wrap">
       <form class="form">
 
         <div class="input__box">
-          <input v-model="task" type="text" id="name" aria-describedby="" placeholder="Task to do" aria-required="true" maxlength="30" autocomplete="off"
+          <input v-model="task.task" type="text" id="name" aria-describedby="" placeholder="Task to do" aria-required="true" maxlength="30" autocomplete="off"
             autocorrect="off" name="username" value="" required>
         </div>
 
         <div class="input__box">
-          <input v-model="priority" type="text" name="password" id="password" placeholder="Priority" aria-describedby="" maxlength="30" aria-required="true"
+          <input v-model="task.priority" type="text" name="password" id="password" placeholder="Priority" aria-describedby="" maxlength="30" aria-required="true"
             autocapitalize="off" autocorrect="off" required>
         </div>
 
         <span class="button-wrap">
-          <button class="btn" type="submit" name="submit">Add Task</button>
+          <button @click.prevent="new_task"  class="btn" type="submit" name="submit">Add Task</button>
         </span>
       </form>
     </div>
@@ -27,8 +28,17 @@ export default {
   name: 'about',
   data() {
     return {
-      task: "",
-      priority: ""
+      task: {
+        task: "",
+        priority: "",
+        done: false
+      },
+    }
+  },
+  methods: {
+    new_task() {
+      this.$emit("add_task", this.task);
+      console.log(this.task);
     }
   }
 }
@@ -44,7 +54,7 @@ export default {
     -moz-box-direction: normal;
     -webkit-box-direction: normal;
     max-width: 80%;
-    margin: 50px auto;
+    margin: 0 auto;
   }
 
   .input__box {

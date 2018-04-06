@@ -19,15 +19,15 @@
         </tr>
         <tr class="app__table-control">
           <td colspan="3">Rows per page:
-            <select name="" id="" v-model="pagination_nr">
+            <select name="" id="" v-model.number="pagination_nr">
               <option selected>5</option>
               <option>10</option>
               <option>15</option>
             </select>
-           {{start_from}} - {{end_to}} of {{database.length}}
+            {{helpers.start_from}} - {{helpers.end_to}} of {{database.length}}
             <span @click="decrement" class="ion-ios-arrow-left"></span>
             <span @click="increment" class="ion-ios-arrow-right"></span>
-         
+
           </td>
         </tr>
       </tbody>
@@ -198,16 +198,19 @@
           }
         ],
         pagination_nr: 5,
-        start_from: 1,
-        end_to: 5,
-        counter: 2
+        helpers: {
+          start_from: 1,
+          end_to: 5,
+          counter: 2
+        }
       }
     },
     watch: {
       pagination_nr() {
         this.details = this.database.slice(0, this.pagination_nr);
-        this.start_from = 1;
-        this.end_to = this.pagination_nr;
+        this.helpers.start_from = 1;
+        this.helpers.end_to = this.pagination_nr;
+        this.helpers.counter = 2;
       }
     },
     created() {
@@ -215,25 +218,45 @@
     },
     methods: {
       increment() {
-        let pageNum = parseInt(this.pagination_nr),
-            ends = parseInt(this.end_to),
-            starts = parseInt(this.start_from),
-            count = this.counter;
-        this.details = this.database.slice(pageNum, pageNum*count);
-        if(ends + pageNum < this.database.length){
-          this.end_to = ends + pageNum;
-        } else {
-          this.end_to = this.database.length;
-        }
-        if(starts + pageNum < this.database.length) {
-          this.start_from = starts + pageNum;
+        let pageNum = this.pagination_nr,
+          ends = this.helpers.end_to,
+          starts = this.helpers.start_from,
+          count = this.helpers.counter;
+
+        this.details = this.database.slice(pageNum * (count - 1), (pageNum * count));
+        console.log(this.helpers.counter, pageNum)
+
+        if (ends + pageNum < this.database.length) {
+          this.helpers.counter += 1;
         } else {
           return;
         }
-        this.pageNum = pageNum + pageNum;
-      },
-      decrement(){
 
+        if (ends + pageNum < this.database.length) {
+          this.helpers.end_to = ends + pageNum;
+        } else {
+          this.helpers.end_to = this.database.length;
+        }
+        if (starts + pageNum < this.database.length) {
+          this.helpers.start_from = starts + pageNum;
+        } else {
+          return;
+        }
+      },
+      decrement() {
+
+        let pageNum = this.pagination_nr,
+          ends = this.helpers.end_to,
+          starts = this.helpers.start_from,
+          count = this.helpers.counter;
+        if (this.helpers.conuter === 6) {
+          this.helpers.counter = 4;
+        }
+        if (this.helpers.counter > 1) {
+          this.helpers.counter -= 1;
+          console.log(this.helpers.counter, pageNum)
+          this.details = this.database.slice(pageNum * (count - 2), (pageNum * (count - 1)));
+        }
       }
     }
   }
@@ -346,15 +369,15 @@
     left: 2px;
   }
 
-.ion-ios-arrow-left {
-  padding-right: 20px;
-  padding-left: 10px;
-}
+  .ion-ios-arrow-left {
+    padding-right: 20px;
+    padding-left: 10px;
+  }
 
-.ion-ios-arrow-left, .ion-ios-arrow-right {
-  cursor: pointer;
-}
-  // 5. Modifier
+  .ion-ios-arrow-left,
+  .ion-ios-arrow-right {
+    cursor: pointer;
+  } // 5. Modifier
   // 6. State
   // 7. Animations
 </style>
