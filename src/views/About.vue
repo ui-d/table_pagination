@@ -15,11 +15,11 @@
         </div>
         <h2>Choose columns to display:</h2>
         <div class="input__checkbox">
-          <input type="checkbox" name="" id="task">
+          <input v-model="headers_on.name" type="checkbox" name="" id="task">
           <label for="task">Task name</label>
-          <input type="checkbox" name="" id="priority">
+          <input v-model="headers_on.priority" type="checkbox" name="" id="priority">
           <label for="priority">Priority</label>
-          <input type="checkbox" name="" id="done">
+          <input v-model="headers_on.done" type="checkbox" name="" id="done">
           <label for="done">Done</label>
         </div>
 
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
   export default {
     name: 'about',
     data() {
@@ -43,10 +45,12 @@
         },
       }
     },
+    computed: mapState([
+      'headers_on'
+    ]),
     methods: {
       new_task() {
-        this.$emit("add_task", this.task);
-        console.log(this.task);
+        this.$store.commit("new_task", this.task);
       }
     }
   }

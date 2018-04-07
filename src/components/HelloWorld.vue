@@ -3,16 +3,16 @@
     <table class="app__table">
       <thead>
         <tr v-for="(header, index) in headers" :key="index">
-          <td @click="sort_tasks('task')">{{header.first}}</td>
-          <td @click="sort_priority('priority')">{{header.second}}</td>
-          <td @click="sort_done('done')">{{header.third}}</td>
+          <td v-if="headers_on.name" @click="sort_tasks('task')">{{header.first}}</td>
+          <td v-if="headers_on.priority" @click="sort_priority('priority')">{{header.second}}</td>
+          <td v-if="headers_on.done" @click="sort_done('done')">{{header.third}}</td>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(detail, index) in details" :key="index">
-          <td>{{detail.task}}</td>
-          <td>{{detail.priority}}</td>
-          <td>
+          <td v-if="headers_on.name">{{detail.task}}</td>
+          <td v-if="headers_on.priority">{{detail.priority}}</td>
+          <td v-if="headers_on.done">
             <input type="checkbox" name="" :id="index" v-model="detail.done">
             <label :for="index"></label>
           </td>
@@ -36,15 +36,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
   export default {
     name: 'HelloWorld',
     data() {
       return {
-        headers: [{
-          first: "Task name",
-          second: "Priority",
-          third: "Done"
-        }],
         details: [{
             task: "Take out the trash",
             priority: "Medium",
@@ -71,132 +68,6 @@
             done: false
           }
         ],
-        database: [{
-            task: "Take out the trash",
-            priority: "Medium",
-            done: false
-          },
-          {
-            task: "Feed the dog",
-            priority: "High",
-            done: true
-          },
-          {
-            task: "Order lunch",
-            priority: "High",
-            done: false
-          },
-          {
-            task: "Send email to Peter",
-            priority: "Low",
-            done: true
-          },
-          {
-            task: "Buy groceries",
-            priority: "Medium",
-            done: false
-          },
-          {
-            task: "Take out the trash 2",
-            priority: "Medium",
-            done: false
-          },
-          {
-            task: "Feed the dog 2",
-            priority: "High",
-            done: true
-          },
-          {
-            task: "Order lunch 2",
-            priority: "High",
-            done: false
-          },
-          {
-            task: "Send email to Peter 2",
-            priority: "Low",
-            done: true
-          },
-          {
-            task: "Buy groceries 2",
-            priority: "Medium",
-            done: false
-          },
-          {
-            task: "Take out the trash 3",
-            priority: "Medium",
-            done: false
-          },
-          {
-            task: "Feed the dog 3",
-            priority: "High",
-            done: true
-          },
-          {
-            task: "Order lunch 3",
-            priority: "High",
-            done: false
-          },
-          {
-            task: "Send email to Peter 3",
-            priority: "Low",
-            done: true
-          },
-          {
-            task: "Buy groceries 3",
-            priority: "Medium",
-            done: false
-          },
-          {
-            task: "Take out the trash 4",
-            priority: "Medium",
-            done: false
-          },
-          {
-            task: "Feed the dog 4",
-            priority: "High",
-            done: true
-          },
-          {
-            task: "Order lunch 4",
-            priority: "High",
-            done: false
-          },
-          {
-            task: "Send email to Peter 4",
-            priority: "Low",
-            done: true
-          },
-          {
-            task: "Buy groceries 4",
-            priority: "Medium",
-            done: false
-          },
-          {
-            task: "Take out the trash 5",
-            priority: "Medium",
-            done: false
-          },
-          {
-            task: "Feed the dog 5",
-            priority: "High",
-            done: true
-          },
-          {
-            task: "Order lunch 5",
-            priority: "High",
-            done: false
-          },
-          {
-            task: "Send email to Peter 5",
-            priority: "Low",
-            done: true
-          },
-          {
-            task: "Buy groceries 5",
-            priority: "Medium",
-            done: false
-          }
-        ],
         pagination_nr: 5,
         helpers: {
           start_from: 1,
@@ -206,6 +77,11 @@
         }
       }
     },
+    computed: mapState([
+  'database',
+  'headers',
+  'headers_on'
+]),
     watch: {
       pagination_nr() {
         this.details = this.database.slice(0, this.pagination_nr);
