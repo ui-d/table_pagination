@@ -229,7 +229,6 @@
           count = this.helpers.counter;
 
         this.details = this.database.slice(pageNum * (count - 1), (pageNum * count));
-        console.log(this.helpers.counter, pageNum)
 
         if (ends + pageNum < this.database.length) {
           this.helpers.counter += 1;

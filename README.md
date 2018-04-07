@@ -1,5 +1,5 @@
 # Table Pagination
-### Reusable component built with Vue.js and Vues
+### Reusable component built with Vue.js and Vuex
 
 
 ## Build Setup
