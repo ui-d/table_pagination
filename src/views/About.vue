@@ -5,17 +5,26 @@
       <form class="form">
 
         <div class="input__box">
-          <input v-model="task.task" type="text" id="name" aria-describedby="" placeholder="Task to do" aria-required="true" maxlength="30" autocomplete="off"
-            autocorrect="off" name="username" value="" required>
+          <input v-model="task.task" type="text" id="name" aria-describedby="" placeholder="Task to do" aria-required="true" maxlength="30"
+            autocomplete="off" autocorrect="off" name="username" value="" required>
         </div>
 
         <div class="input__box">
-          <input v-model="task.priority" type="text" name="password" id="password" placeholder="Priority" aria-describedby="" maxlength="30" aria-required="true"
-            autocapitalize="off" autocorrect="off" required>
+          <input v-model="task.priority" type="text" name="password" id="password" placeholder="Priority" aria-describedby="" maxlength="30"
+            aria-required="true" autocapitalize="off" autocorrect="off" required>
+        </div>
+        <h2>Choose columns to display:</h2>
+        <div class="input__checkbox">
+          <input type="checkbox" name="" id="task">
+          <label for="task">Task name</label>
+          <input type="checkbox" name="" id="priority">
+          <label for="priority">Priority</label>
+          <input type="checkbox" name="" id="done">
+          <label for="done">Done</label>
         </div>
 
         <span class="button-wrap">
-          <button @click.prevent="new_task"  class="btn" type="submit" name="submit">Add Task</button>
+          <button @click.prevent="new_task" class="btn" type="submit" name="submit">Add Task</button>
         </span>
       </form>
     </div>
@@ -23,30 +32,28 @@
 </template>
 
 <script>
-
-export default {
-  name: 'about',
-  data() {
-    return {
-      task: {
-        task: "",
-        priority: "",
-        done: false
-      },
-    }
-  },
-  methods: {
-    new_task() {
-      this.$emit("add_task", this.task);
-      console.log(this.task);
+  export default {
+    name: 'about',
+    data() {
+      return {
+        task: {
+          task: "",
+          priority: "",
+          done: false
+        },
+      }
+    },
+    methods: {
+      new_task() {
+        this.$emit("add_task", this.task);
+        console.log(this.task);
+      }
     }
   }
-}
 </script>
 
 
 <style>
-
   .form {
     display: flex;
     flex-direction: column;
@@ -59,6 +66,21 @@ export default {
 
   .input__box {
     margin: 10px 40px;
+  }
+
+  .input__checkbox {
+    display: flex;
+    margin: 10px 40px;
+    align-items: center;
+  }
+
+input[type=checkbox] {
+  display: flex;
+  margin-left: 0;
+}
+
+  input[type=checkbox]+label {
+    margin-right: 140px;
   }
 
   input {
