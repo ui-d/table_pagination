@@ -3,9 +3,9 @@
     <table class="app__table">
       <thead>
         <tr v-for="(header, index) in headers" :key="index">
-          <td @click="sort_tasks">{{header.first}}</td>
-          <td @click="sort_priority">{{header.second}}</td>
-          <td @click="sort_done">{{header.third}}</td>
+          <td @click="sort_tasks('task')">{{header.first}}</td>
+          <td @click="sort_priority('priority')">{{header.second}}</td>
+          <td @click="sort_done('done')">{{header.third}}</td>
         </tr>
       </thead>
       <tbody>
@@ -212,6 +212,9 @@
         this.helpers.start_from = 1;
         this.helpers.end_to = this.pagination_nr;
         this.helpers.counter = 2;
+      },
+      database() {
+        this.details = this.database.slice(0, this.pagination_nr);
       }
     },
     created() {
@@ -257,30 +260,75 @@
         }
         if (this.helpers.counter > 1) {
           this.helpers.counter -= 1;
-          console.log(this.helpers.counter, pageNum)
           this.details = this.database.slice(pageNum * (count - 2), (pageNum * (count - 1)));
         }
+
+        if (ends > pageNum) {
+          this.helpers.end_to = ends - pageNum;
+        } else {
+          this.helpers.end_to = this.pagination_nr;
+        }
+        if (starts > pageNum) {
+          this.helpers.start_from = starts - pageNum;
+        } else {
+          this.helpers.start_from = 1;
+        }
+
+
       },
       sort_tasks() {
-      // this.database.sort(function (a, b) {
-      //     return a.task < b.task
-      //   });
 
-      this.helpers.sort_task = true;
+        function compare(a, b) {
+
+          const item1 = a.task.toUpperCase();
+          const item2 = b.task.toUpperCase();
 
 
+          let comparison = 0;
+          if (item1 > item2) {
+            comparison = 1;
+          } else if (item1 < item2) {
+            comparison = -1;
+          }
+          return comparison;
+        }
 
+        this.database.sort(compare);
 
       },
       sort_priority() {
-        this.details.sort(function (a, b) {
-          return a.priority > b.priority
-        });
+        function compare(a, b) {
+
+          const item1 = a.priority.toUpperCase();
+          const item2 = b.priority.toUpperCase();
+
+          let comparison = 0;
+          if (item1 > item2) {
+            comparison = 1;
+          } else if (item1 < item2) {
+            comparison = -1;
+          }
+          return comparison;
+        }
+
+        this.database.sort(compare);
       },
       sort_done() {
-        this.details.sort(function (a, b) {
-          return a.done > b.done
-        });
+        function compare(a, b) {
+
+          const item1 = a.done;
+          const item2 = b.done;
+
+          let comparison = 0;
+          if (item1 > item2) {
+            comparison = 1;
+          } else if (item1 < item2) {
+            comparison = -1;
+          }
+          return comparison;
+        }
+
+        this.database.sort(compare);
       }
     }
   }
@@ -312,6 +360,7 @@
     background: $pure-white;
     font-size: 62.5%;
     color: $hole-dark;
+    user-select: none;
   } // 3. Layout
   // 4. Block + element
   .app__table {
@@ -395,8 +444,13 @@
   }
 
   .ion-ios-arrow-left {
-    padding-right: 20px;
-    padding-left: 10px;
+    padding-right: 10px;
+    padding-left: 5px;
+  }
+
+  .ion-ios-arrow-right {
+    padding-right: 10px;
+    padding-left: 5px;
   }
 
   .ion-ios-arrow-left,
