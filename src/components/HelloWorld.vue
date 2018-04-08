@@ -18,16 +18,19 @@
           </td>
         </tr>
         <tr class="app__table-control">
-          <td colspan="3">Rows per page:
-            <select name="" id="" v-model.number="pagination_nr">
+          <td colspan="3">
+             <div class="app__table-select">
+            Rows per page:
+            <select name="" v-model.number="pagination_nr">
               <option selected>5</option>
               <option>10</option>
               <option>15</option>
             </select>
+                   </div>
             {{helpers.start_from}} - {{helpers.end_to}} of {{database.length}}
             <span @click="decrement" class="ion-ios-arrow-left"></span>
             <span @click="increment" class="ion-ios-arrow-right"></span>
-
+    
           </td>
         </tr>
       </tbody>
@@ -95,6 +98,9 @@ import { mapState } from 'vuex'
     },
     created() {
       this.details = this.database.slice(0, this.pagination_nr);
+
+
+
     },
     methods: {
       increment() {
@@ -154,7 +160,7 @@ import { mapState } from 'vuex'
       sort_tasks() {
 
         function compare(a, b) {
-
+          
           const item1 = a.task.toUpperCase();
           const item2 = b.task.toUpperCase();
 
@@ -239,7 +245,9 @@ import { mapState } from 'vuex'
   } // 3. Layout
   // 4. Block + element
   .app__table {
-    width: 670px;
+    width: 100%;
+    max-width: 670px;
+    min-width: 290px;
     margin: 0 auto 100px auto;
     font-size: 1rem;
     text-align: left;
@@ -272,6 +280,13 @@ import { mapState } from 'vuex'
     text-align: right;
     td {
       padding-right: 30px;
+    }
+  }
+
+  .app__table-select {
+    display: none;
+    @media screen and (min-width: 420px){
+      display: inline-block;
     }
   }
 

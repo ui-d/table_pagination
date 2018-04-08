@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <a href="/"><img src="../assets/logo.png"></a>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <keep-alive>
+    <HelloWorld />
+    </keep-alive>
   </div>
 </template>
 

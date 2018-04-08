@@ -1,17 +1,24 @@
 <template>
   <div class="input">
     <img src="../assets/logo.png">
+    <p class="is--correct" v-if="success">Success!<p/>
+    <p class="is--incorrect" v-if="failure">Please, fill form correctly<p/>
     <div class="form-wrap">
       <form class="form">
 
         <div class="input__box">
-          <input v-model="task.task" type="text" id="name" aria-describedby="" placeholder="Task to do" aria-required="true" maxlength="30"
+          <label for="name">add new task</label>
+          <input v-model="task.task" type="text" id="name" aria-describedby="" placeholder="Task name" aria-required="true" maxlength="30"
             autocomplete="off" autocorrect="off" name="username" value="" required>
         </div>
 
         <div class="input__box">
-          <input v-model="task.priority" type="text" name="password" id="password" placeholder="Priority" aria-describedby="" maxlength="30"
-            aria-required="true" autocapitalize="off" autocorrect="off" required>
+          <label for="name">set priority for task</label>
+            <select v-model="task.priority" name="" id="">
+              <option selected>Low</option>
+              <option>Medium</option>
+              <option>High</option>
+            </select>
         </div>
         <h2>Choose columns to display:</h2>
         <div class="input__checkbox">
@@ -40,9 +47,11 @@ import { mapState } from 'vuex';
       return {
         task: {
           task: "",
-          priority: "",
+          priority: "Medium",
           done: false
         },
+        success: false,
+        failure: false
       }
     },
     computed: mapState([
@@ -50,32 +59,56 @@ import { mapState } from 'vuex';
     ]),
     methods: {
       new_task() {
+        this.success = false;
+        this.failure = false;
+        if(this.task.task != ""){
         this.$store.commit("new_task", this.task);
+        this.success = true;
+        }else {
+          this.failure = true;
+        }
       }
     }
   }
 </script>
 
 
-<style>
+<style lang="scss">
   .form {
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
     -moz-box-direction: normal;
     -webkit-box-direction: normal;
-    max-width: 80%;
+    max-width: 99%;
+    @media screen and (min-width: 700px){
+    max-width: 60%;
+    }
     margin: 0 auto;
+    text-align: left;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  label {
+    font-size: .9rem;
+    color: #9b9b9b;
   }
 
   .input__box {
-    margin: 10px 40px;
+    @media screen and (min-width: 420px){
+      margin: 10px 40px;
+    }
   }
 
   .input__checkbox {
     display: flex;
-    margin: 10px 40px;
     align-items: center;
+    @media screen and (min-width: 420px){
+      margin: 10px 40px;
+    }
   }
 
 input[type=checkbox] {
@@ -83,11 +116,9 @@ input[type=checkbox] {
   margin-left: 0;
 }
 
-  input[type=checkbox]+label {
-    margin-right: 140px;
-  }
 
-  input {
+
+  input, select {
     height: 36px;
     border: 1px solid #efefef;
     border-radius: 3px;
@@ -99,6 +130,7 @@ input[type=checkbox] {
     overflow: hidden;
     text-overflow: ellipsis;
     box-sizing: border-box;
+    margin: 10px 0 10px 0;
   }
 
   input#name:focus,
@@ -126,5 +158,13 @@ input[type=checkbox] {
     line-height: 26px;
     outline: none;
     white-space: nowrap;
+  }
+
+  .is--incorrect {
+    color: #f44242;
+  }
+
+ .is--correct {
+    color: #41f48c;
   }
 </style>

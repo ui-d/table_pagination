@@ -144,7 +144,11 @@ export default new Vuex.Store({
   },
   mutations: {
       new_task(state, n) {
-        state.database.push(n);
+        state.database.unshift(n);
+        localStorage.setItem(`newTask`, JSON.stringify(n));
+      },
+      build_DataBase(state, n) {
+          state.database.unshift(JSON.parse(n));
       }
   },
   actions: {
