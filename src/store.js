@@ -139,6 +139,21 @@ export default new Vuex.Store({
       task: "Buy groceries 5",
       priority: "Medium",
       done: false
+    },
+    {
+      task: "Take out the trash 6",
+      priority: "Medium",
+      done: false
+    },
+    {
+      task: "Feed the dog 6",
+      priority: "High",
+      done: true
+    },
+    {
+      task: "Order lunch 6",
+      priority: "High",
+      done: false
     }
   ],
   },

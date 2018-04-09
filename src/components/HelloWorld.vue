@@ -3,9 +3,15 @@
     <table class="app__table">
       <thead>
         <tr v-for="(header, index) in headers" :key="index">
-          <td v-if="headers_on.name" @click="sort_tasks('task')">{{header.first}}</td>
-          <td v-if="headers_on.priority" @click="sort_priority('priority')">{{header.second}}</td>
-          <td v-if="headers_on.done" @click="sort_done('done')">{{header.third}}</td>
+          <td v-if="headers_on.name" @click="sort_tasks('task')">{{header.first}}
+            <span v-if="helpers.sort_task">↓</span>
+          </td>
+          <td v-if="headers_on.priority" @click="sort_priority('priority')">{{header.second}}
+            <span v-if="helpers.sort_priority">↓</span>
+          </td>
+          <td v-if="headers_on.done" @click="sort_done('done')">{{header.third}}
+            <span v-if="helpers.sort_done">↓</span>
+          </td>
         </tr>
       </thead>
       <tbody>
@@ -19,18 +25,18 @@
         </tr>
         <tr class="app__table-control">
           <td colspan="3">
-             <div class="app__table-select">
-            Rows per page:
-            <select name="" v-model.number="pagination_nr">
-              <option selected>5</option>
-              <option>10</option>
-              <option>15</option>
-            </select>
-                   </div>
+            <div class="app__table-select">
+              Rows per page:
+              <select name="" v-model.number="pagination_nr">
+                <option selected>5</option>
+                <option>10</option>
+                <option>15</option>
+              </select>
+            </div>
             {{helpers.start_from}} - {{helpers.end_to}} of {{database.length}}
             <span @click="decrement" class="ion-ios-arrow-left"></span>
             <span @click="increment" class="ion-ios-arrow-right"></span>
-    
+
           </td>
         </tr>
       </tbody>
@@ -39,7 +45,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+  import {
+    mapState
+  } from 'vuex'
 
   export default {
     name: 'HelloWorld',
@@ -76,15 +84,17 @@ import { mapState } from 'vuex'
           start_from: 1,
           end_to: 5,
           counter: 2,
-          sort_task: false
+          sort_task: false,
+          sort_priority: false,
+          sort_done: false
         }
       }
     },
     computed: mapState([
-  'database',
-  'headers',
-  'headers_on'
-]),
+      'database',
+      'headers',
+      'headers_on'
+    ]),
     watch: {
       pagination_nr() {
         this.details = this.database.slice(0, this.pagination_nr);
@@ -114,56 +124,53 @@ import { mapState } from 'vuex'
 
         if (ends + pageNum < this.database.length) {
           this.helpers.counter += 1;
-        } else {
-          return;
-        }
-
-        if (ends + pageNum < this.database.length) {
           this.helpers.end_to = ends + pageNum;
-        } else {
-          this.helpers.end_to = this.database.length;
-        }
-        if (starts + pageNum < this.database.length) {
           this.helpers.start_from = starts + pageNum;
         } else {
-          return;
-        }
+          this.helpers.end_to = this.database.length;
+          if (ends + pageNum > this.database.length && ends + pageNum < this.database.length + pageNum) {
+            this.helpers.start_from = starts + pageNum;
+          }
+        };
+        console.log(count);
       },
       decrement() {
 
         let pageNum = this.pagination_nr,
           ends = this.helpers.end_to,
           starts = this.helpers.start_from,
-          count = this.helpers.counter;
+          count = this.helpers.counter,
+          first = this.database.length % this.pagination_nr;
 
-        if (this.helpers.conuter === 6) {
-          this.helpers.counter = 4;
-        }
-        if (this.helpers.counter > 1) {
+
+
+
+
+        if (this.helpers.counter > 2) {
           this.helpers.counter -= 1;
           this.details = this.database.slice(pageNum * (count - 2), (pageNum * (count - 1)));
         }
+        console.log(count);
 
         if (ends > pageNum) {
+          if (this.helpers.end_to % this.pagination_nr != 0) {
+            this.helpers.end_to -= first;
+            this.helpers.start_from = starts - pageNum;
+            return;
+          }
           this.helpers.end_to = ends - pageNum;
-        } else {
-          this.helpers.end_to = this.pagination_nr;
-        }
-        if (starts > pageNum) {
           this.helpers.start_from = starts - pageNum;
         } else {
+          this.helpers.end_to = this.pagination_nr;
           this.helpers.start_from = 1;
         }
-
-
       },
       sort_tasks() {
 
         function compare(a, b) {
-          
+
           const item1 = a.task.toUpperCase();
           const item2 = b.task.toUpperCase();
-
 
           let comparison = 0;
           if (item1 > item2) {
@@ -173,6 +180,10 @@ import { mapState } from 'vuex'
           }
           return comparison;
         }
+
+        this.helpers.sort_task = true;
+        this.helpers.sort_priority = false;
+        this.helpers.sort_done = false;
 
         this.database.sort(compare);
 
@@ -192,6 +203,10 @@ import { mapState } from 'vuex'
           return comparison;
         }
 
+        this.helpers.sort_task = false;
+        this.helpers.sort_priority = true;
+        this.helpers.sort_done = false;
+
         this.database.sort(compare);
       },
       sort_done() {
@@ -208,6 +223,10 @@ import { mapState } from 'vuex'
           }
           return comparison;
         }
+
+        this.helpers.sort_task = false;
+        this.helpers.sort_priority = false;
+        this.helpers.sort_done = true;
 
         this.database.sort(compare);
       }
@@ -285,7 +304,7 @@ import { mapState } from 'vuex'
 
   .app__table-select {
     display: none;
-    @media screen and (min-width: 420px){
+    @media screen and (min-width: 420px) {
       display: inline-block;
     }
   }
