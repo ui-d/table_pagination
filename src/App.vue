@@ -2,9 +2,11 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Output</router-link> |
-      <router-link to="/about">Input</router-link>
+      <router-link to="/form">Input</router-link>
     </div>
+    <keep-alive>
     <router-view/>
+    </keep-alive>
   </div>
 </template>
 

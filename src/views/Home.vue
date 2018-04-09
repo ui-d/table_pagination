@@ -1,20 +1,18 @@
 <template>
   <div class="home">
     <a href="/"><img src="../assets/logo.png"></a>
-    <keep-alive>
-    <HelloWorld />
-    </keep-alive>
+    <AppTable />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import AppTable from '@/components/AppTable.vue'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    AppTable
   }
 }
 </script>
