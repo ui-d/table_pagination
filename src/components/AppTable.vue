@@ -108,9 +108,10 @@
     },
     created() {
       this.details = this.database.slice(0, this.pagination_nr);
-      let localState = localStorage.getItem("newTask");
-      this.$store.commit("build_DataBase", localState);
-
+      if (localStorage.getItem("newTask")) {
+        let localState = localStorage.getItem("newTask");
+        this.$store.commit("build_DataBase", localState);
+      }
     },
     methods: {
       increment() {
@@ -147,15 +148,14 @@
           count = this.helpers.counter - 1,
           first = this.database.length % this.pagination_nr;
 
-
-
-
-        if (count > 1) {
+        if (count >= 1) {
           this.helpers.counter -= 1;
-          this.details = this.database.slice(pageNum * (count - 2), (pageNum * (count - 1)));
+          this.details = this.database.slice(pageNum * (count - 1), (pageNum * (count)));
         }
 
-
+        if (this.helpers.counter === 1){
+          this.helpers.counter = 2;
+        }
 
         console.log(count);
 
@@ -188,6 +188,7 @@
           return comparison;
         }
 
+
         this.helpers.sort_task = true;
         this.helpers.sort_priority = false;
         this.helpers.sort_done = false;
@@ -196,6 +197,7 @@
 
       },
       sort_priority() {
+
         function compare(a, b) {
 
           const item1 = a.priority.toUpperCase();
@@ -254,16 +256,14 @@
 =====================
 */
 
-// 1. Variables
+  // 1. Variables
   $pure-white: #ffffff;
   $wood-brown: #494430;
   $sweet-orange: #F79933;
   $hole-dark: #525252;
   $light-gray: #EEEEF0;
   $middle-gray: #d6d6d6;
-  $hell-dark: #1D1D1D; 
-  
-  // 1. Font Faces
+  $hell-dark: #1D1D1D; // 1. Font Faces
   // 2. Base
   .app {
     min-width: 100%;
@@ -271,9 +271,7 @@
     font-size: 62.5%;
     color: $hole-dark;
     user-select: none;
-  } 
-  
-  // 3. Layout
+  } // 3. Layout
   // 4. Block + element
   .app__table {
     width: 100%;
@@ -377,9 +375,7 @@
   .ion-ios-arrow-left,
   .ion-ios-arrow-right {
     cursor: pointer;
-  } 
-  
-  // 5. Modifier
+  } // 5. Modifier
   // 6. State
   // 7. Animations
 </style>
